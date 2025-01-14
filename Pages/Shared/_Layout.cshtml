@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AplicatieStudenti</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+</head>
+<body>
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">AplicatieStudii</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <!-- Link pentru Inscriere -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Inscriere/Create">Inscriere</a>
+                    </li>
+                    <!-- Link pentru Studenti -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Studenti/Index">Studenti</a>
+                    </li>
+                    <!-- Link pentru Profesori -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Profesori/Index">Profesori</a>
+                    </li>
+                    <!-- Link pentru Cursuri -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Cursuri/Index">Cursuri</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- Include Popper.js pentru Bootstrap 4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+
+    <!-- Include Bootstrap 4 -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+﻿@page
+@model AplicatieStudenti.Pages.Inscrieri.EditModel
+@{
+    ViewData["Title"] = "Editează Înscrierea";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Inscriere</h4>
+<hr />
+
+<form method="post">
+    <div class="form-group">
+        <label for="StudentID">Student</label>
+        <select id="StudentID" asp-for="Inscriere.StudentID" class="form-control" asp-items="Model.StudentiSelectList">
+        </select>
+        <span asp-validation-for="Inscriere.StudentID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="CursID">Curs</label>
+        <select id="CursID" asp-for="Inscriere.CursID" class="form-control" asp-items="Model.CursuriSelectList">
+        </select>
+        <span asp-validation-for="Inscriere.CursID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="ProfesorID">Profesor</label>
+        <select id="ProfesorID" asp-for="Inscriere.ProfesorID" class="form-control" asp-items="Model.ProfesoriSelectList">
+        </select>
+        <span asp-validation-for="Inscriere.ProfesorID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvează modificările</button>
+    <a asp-page="./Index" class="btn btn-secondary">Înapoi la lista de înscriere</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

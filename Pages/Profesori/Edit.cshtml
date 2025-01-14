@@ -1,0 +1,42 @@
+﻿@page
+@model AplicatieStudenti.Pages.Profesori.EditModel
+@{
+    ViewData["Title"] = "Editează Profesor";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>Profesor</h4>
+<hr />
+
+<form method="post">
+    <div class="form-group">
+        <label for="Nume">Nume</label>
+        <input type="text" id="Nume" class="form-control" asp-for="Profesor.Nume" />
+        <span asp-validation-for="Profesor.Nume" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Prenume">Prenume</label>
+        <input type="text" id="Prenume" class="form-control" asp-for="Profesor.Prenume" />
+        <span asp-validation-for="Profesor.Prenume" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Specializare">Specializare</label>
+        <input type="text" id="Specializare" class="form-control" asp-for="Profesor.Specializare" />
+        <span asp-validation-for="Profesor.Specializare" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Salvează modificările</button>
+        <a asp-page="./Index" class="btn btn-secondary">Înapoi la lista de profesori</a>
+    </div>
+</form>
+
+@* Validare client-side pentru formular *@
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

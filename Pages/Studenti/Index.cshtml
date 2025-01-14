@@ -1,0 +1,40 @@
+﻿@page
+@model AplicatieStudenti.Pages.Studenti.IndexModel
+@{
+    ViewData["Title"] = "Studenți";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Adaugă Student</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nume</th>
+            <th>Prenume</th>
+            <th>Email</th>
+            <th>Data Nașterii</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Student)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.Nume</td>
+                <td>@item.Prenume</td>
+                <td>@item.Email</td>
+                <td>@item.DataNasterii.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

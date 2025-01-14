@@ -1,0 +1,38 @@
+﻿@page
+@model AplicatieStudenti.Pages.Inscrieri.IndexModel
+@{
+    ViewData["Title"] = "Lista de Înscriere";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-page="Create" class="btn btn-primary">Adaugă o nouă înscriere</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Student</th>
+            <th>Curs</th>
+            <th>Profesor</th>
+            <th>Acțiuni</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Inscriere)
+        {
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.Student.Nume @item.Student.Prenume</td>
+                <td>@item.Curs.NumeCurs</td>
+                <td>@item.Profesor.Nume @item.Profesor.Prenume</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@item.ID" class="btn btn-warning">Editează</a>
+                    <a asp-page="Delete" asp-route-id="@item.ID" class="btn btn-danger">Șterge</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

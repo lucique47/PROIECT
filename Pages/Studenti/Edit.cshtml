@@ -1,0 +1,37 @@
+﻿@page
+@model AplicatieStudenti.Pages.Studenti.EditModel
+@{
+    ViewData["Title"] = "Editează Student";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Nume">Nume</label>
+        <input type="text" id="Nume" class="form-control" asp-for="Student.Nume" />
+        <span asp-validation-for="Student.Nume" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Prenume">Prenume</label>
+        <input type="text" id="Prenume" class="form-control" asp-for="Student.Prenume" />
+        <span asp-validation-for="Student.Prenume" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" id="Email" class="form-control" asp-for="Student.Email" />
+        <span asp-validation-for="Student.Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="DataNasterii">Data Nașterii</label>
+        <input type="date" id="DataNasterii" class="form-control" asp-for="Student.DataNasterii" />
+        <span asp-validation-for="Student.DataNasterii" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Editează Student</button>
+</form>
+
+<a asp-page="./Index">Înapoi la lista de Studenți</a>

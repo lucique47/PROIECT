@@ -1,0 +1,37 @@
+﻿@page
+@model AplicatieStudenti.Pages.Inscrieri.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Inscriere</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Inscriere.Student)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Inscriere.Student.ID)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Inscriere.Curs)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Inscriere.Curs.ID)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Inscriere.Profesor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Inscriere.Profesor.ID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Inscriere.ID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
