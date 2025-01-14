@@ -6,24 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AplicatieStudenti.Data;
-using AplicatieStudenti.Modele;
+using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Cursuri
 {
-    public class IndexModel : PageModel
+    public class IndexModel(AplicatieStudenti.Data.AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public IndexModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
-
         public IList<Curs> Curs { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Curs = await _context.Cursuri.ToListAsync();
+            Curs = await context.Cursuri.ToListAsync();
         }
     }
 }

@@ -7,35 +7,32 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AplicatieStudenti.Data;
-using AplicatieStudenti.Modele;
+using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Inscrieri
 {
-    public class EditModel : PageModel
+    public class EditModel(AplicatieStudenti.Data.AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public EditModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context = context;
 
         [BindProperty]
-        public Inscriere Inscriere { get; set; }
+        public required Inscriere Inscriere { get; set; }
 
         // Proprietăți pentru listele derulante
-        public SelectList StudentiSelectList { get; set; }
-        public SelectList CursuriSelectList { get; set; }
-        public SelectList ProfesoriSelectList { get; set; }
+        public required SelectList StudentiSelectList { get; set; }
+        public required SelectList CursuriSelectList { get; set; }
+        public required SelectList ProfesoriSelectList { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
             // Încarcă Inscrierea din baza de date
+#pragma warning disable CS8601 // Possible null reference assignment.
             Inscriere = await _context.Inscriere
                 .Include(i => i.Student)
                 .Include(i => i.Curs)
                 .Include(i => i.Profesor)
                 .FirstOrDefaultAsync(m => m.ID == id);
+#pragma warning restore CS8601 // Possible null reference assignment.
 
             if (Inscriere == null)
             {

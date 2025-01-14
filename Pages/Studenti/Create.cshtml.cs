@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AplicatieStudenti.Data;
-using AplicatieStudenti.Modele;
+using AplicatieStudenti.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Threading.Tasks;
-using AplicatieStudenti.Data;
 
 namespace AplicatieStudenti.Pages.Studenti
 {

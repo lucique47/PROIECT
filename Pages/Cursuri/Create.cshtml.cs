@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AplicatieStudenti.Data;
-using AplicatieStudenti.Modele;
+using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Cursuri
 {

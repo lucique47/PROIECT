@@ -6,19 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using AplicatieStudenti.Data;
-using AplicatieStudenti.Modele;
+using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Studenti
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel(AplicatieStudenti.Data.AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public DetailsModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
-
         public Student Student { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -28,7 +21,7 @@ namespace AplicatieStudenti.Pages.Studenti
                 return NotFound();
             }
 
-            var student = await _context.Studenti.FirstOrDefaultAsync(m => m.ID == id);
+            var student = await context.Studenti.FirstOrDefaultAsync(m => m.ID == id);
             if (student == null)
             {
                 return NotFound();

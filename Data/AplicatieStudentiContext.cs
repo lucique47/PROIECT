@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using AplicatieStudenti.Modele;
+using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Data
 {
