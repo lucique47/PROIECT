@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AplicatieStudenti.Data;
 using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Studenti
 {
-    public class EditModel : PageModel
+    public class EditModel(AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public EditModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+        private readonly AplicatieStudentiContext _context = context;
 
         [BindProperty]
         public Student Student { get; set; } = default!;
@@ -29,18 +22,14 @@ namespace AplicatieStudenti.Pages.Studenti
             {
                 return NotFound();
             }
-
-            var student =  await _context.Studenti.FirstOrDefaultAsync(m => m.ID == id);
-            if (student == null)
+            Student = await _context.Studenti.FirstOrDefaultAsync(m => m.ID == id) ?? new Student { Nume = string.Empty, Prenume = string.Empty, Email = string.Empty };
+            if (Student == null)
             {
                 return NotFound();
             }
-            Student = student;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -48,10 +37,9 @@ namespace AplicatieStudenti.Pages.Studenti
                 return Page();
             }
 
-            _context.Attach(Student).State = EntityState.Modified;
-
             try
             {
+                _context.Attach(Student).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

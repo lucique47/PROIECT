@@ -1,13 +1,13 @@
 ﻿@page
 @model AplicatieStudenti.Pages.Inscrieri.IndexModel
 @{
-    ViewData["Title"] = "Lista de Înscriere";
+    ViewData["Title"] = "Lista de inscriere";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-page="Create" class="btn btn-primary">Adaugă o nouă înscriere</a>
+    <a asp-page="Create" class="btn btn-primary">Adauga o noua inscriere</a>
 </p>
 
 <table class="table">
@@ -17,7 +17,7 @@
             <th>Student</th>
             <th>Curs</th>
             <th>Profesor</th>
-            <th>Acțiuni</th>
+            <th>Actiuni</th>
         </tr>
     </thead>
     <tbody>
@@ -25,12 +25,12 @@
         {
             <tr>
                 <td>@item.ID</td>
-                <td>@item.Student.Nume @item.Student.Prenume</td>
-                <td>@item.Curs.NumeCurs</td>
-                <td>@item.Profesor.Nume @item.Profesor.Prenume</td>
+                <td>@(item.Student?.Nume ?? "N/A") @(item.Student?.Prenume ?? "N/A")</td>
+                <td>@(item.Curs?.NumeCurs ?? "N/A")</td>
+                <td>@(item.Profesor?.Nume ?? "N/A") @(item.Profesor?.Prenume ?? "N/A")</td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@item.ID" class="btn btn-warning">Editează</a>
-                    <a asp-page="Delete" asp-route-id="@item.ID" class="btn btn-danger">Șterge</a>
+                    <a asp-page="Edit" asp-route-id="@item.ID" class="btn btn-warning">Editeaza</a>
+                    <a asp-page="Delete" asp-route-id="@item.ID" class="btn btn-danger">Sterge</a>
                 </td>
             </tr>
         }

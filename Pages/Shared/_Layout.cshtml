@@ -3,12 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AplicatieStudenti</title>
+    <title>@ViewData["Title"] - Aplicatie Studenti</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
 </head>
 <body>
     <header>
-        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">AplicatieStudii</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,19 +15,18 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <!-- Link pentru Inscriere -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Index">Homepage</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-page="/Inscriere/Create">Inscriere</a>
                     </li>
-                    <!-- Link pentru Studenti -->
                     <li class="nav-item">
                         <a class="nav-link" asp-page="/Studenti/Index">Studenti</a>
                     </li>
-                    <!-- Link pentru Profesori -->
                     <li class="nav-item">
                         <a class="nav-link" asp-page="/Profesori/Index">Profesori</a>
                     </li>
-                    <!-- Link pentru Cursuri -->
                     <li class="nav-item">
                         <a class="nav-link" asp-page="/Cursuri/Index">Cursuri</a>
                     </li>
