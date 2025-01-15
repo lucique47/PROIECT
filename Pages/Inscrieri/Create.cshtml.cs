@@ -5,6 +5,7 @@ using AplicatieStudenti.Data;
 using AplicatieStudenti.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace AplicatieStudenti.Pages.Inscrieri
 {
@@ -13,56 +14,38 @@ namespace AplicatieStudenti.Pages.Inscrieri
         private readonly AplicatieStudentiContext _context = context;
 
         [BindProperty]
-        public Inscriere Inscriere { get; set; } = new Inscriere();
+        public required Inscriere Inscriere { get; set; }
 
-        // Metoda pentru a prelua datele la deschiderea paginii Create
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            var studenti = _context.Studenti.ToList();
-            var cursuri = _context.Cursuri.ToList();
-            var profesori = _context.Profesori.ToList();  // Adăugăm profesori pentru SelectList
+            // Populăm lista de studenți cu Nume și Prenume
+            ViewData["StudentID"] = new SelectList(await _context.Studenti
+                .Select(s => new { s.ID, NumeComplet = s.Nume + " " + s.Prenume })
+                .ToListAsync(), "ID", "NumeComplet");
 
-            if (studenti == null || studenti.Count == 0)
-            {
-                ModelState.AddModelError(string.Empty, "Nu există studenți disponibili.");
-            }
+            // Populăm lista de cursuri cu Numele cursului
+            ViewData["CursID"] = new SelectList(await _context.Cursuri
+                .Select(c => new { c.ID, c.NumeCurs })
+                .ToListAsync(), "ID", "NumeCurs");
 
-            if (cursuri == null || cursuri.Count == 0)
-            {
-                ModelState.AddModelError(string.Empty, "Nu există cursuri disponibile.");
-            }
-
-            if (profesori == null || profesori.Count == 0)
-            {
-                ModelState.AddModelError(string.Empty, "Nu există profesori disponibili.");
-            }
-
-            // Populăm ViewData cu listele de SelectList
-            ViewData["StudentID"] = new SelectList(studenti, "ID", "Nume");
-            ViewData["CursID"] = new SelectList(cursuri, "ID", "Titlu");
-            ViewData["ProfesorID"] = new SelectList(profesori, "ID", "Nume");
+            // Populăm lista de profesori cu Numele complet
+            ViewData["ProfesorID"] = new SelectList(await _context.Profesori
+                .Select(p => new { p.ID, NumeComplet = p.Nume + " " + p.Prenume })
+                .ToListAsync(), "ID", "NumeComplet");
 
             return Page();
         }
 
-
-        // Metoda pentru a salva înscrierea la trimiterea formularului
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                // Dacă formularul nu este valid, populăm din nou SelectList pentru a le arăta în caz de eroare
-                ViewData["StudentID"] = new SelectList(_context.Studenti.ToList(), "ID", "Nume");
-                ViewData["CursID"] = new SelectList(_context.Cursuri.ToList(), "ID", "Titlu");
-                ViewData["ProfesorID"] = new SelectList(_context.Profesori.ToList(), "ID", "Nume");
-                return Page(); // Rămâne pe aceeași pagină pentru a corecta erorile
+                return Page();
             }
 
-            // Dacă formularul este valid, adăugăm înscrierea în baza de date
             _context.Inscrieri.Add(Inscriere);
             await _context.SaveChangesAsync();
 
-            // Redirecționează utilizatorul la pagina de Index (lista de înscriere)
             return RedirectToPage("./Index");
         }
     }

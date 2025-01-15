@@ -8,18 +8,27 @@
 
 <form method="post">
     <div class="form-group">
-        <label asp-for="Inscriere.StudentID" class="control-label"></label>
-        <select asp-for="Inscriere.StudentID" class="form-control" asp-items="ViewBag.StudentID"></select>
+        <label asp-for="Inscriere.StudentID" class="control-label">Student</label>
+        <select asp-for="Inscriere.StudentID" class="form-control" asp-items="@(ViewData["StudentID"] as SelectList)">
+            <option value="">Selecteaza studentul</option>
+        </select>
     </div>
+
     <div class="form-group">
-        <label asp-for="Inscriere.CursID" class="control-label"></label>
-        <select asp-for="Inscriere.CursID" class="form-control" asp-items="ViewBag.CursID"></select>
+        <label asp-for="Inscriere.CursID" class="control-label">Curs</label>
+        <select asp-for="Inscriere.CursID" class="form-control" asp-items="@(ViewData["CursID"] as SelectList)">
+            <option value="">Selectează Cursul</option>
+        </select>
     </div>
+
     <div class="form-group">
-        <label asp-for="Inscriere.ProfesorID" class="control-label"></label>
-        <select asp-for="Inscriere.ProfesorID" class="form-control" asp-items="ViewBag.ProfesorID"></select>
+        <label asp-for="Inscriere.ProfesorID" class="control-label">Profesor</label>
+        <select asp-for="Inscriere.ProfesorID" class="form-control" asp-items="@(ViewData["ProfesorID"] as SelectList)">
+            <option value="">Selectează Profesorul</option>
+        </select>
     </div>
+
     <button type="submit" class="btn btn-primary">Salveaza</button>
 </form>
 
-<a asp-page="./Index">Inapoi la lista de inscrieri</a>
+<a asp-page="./Index">Inapoi la lista de inscriere</a>

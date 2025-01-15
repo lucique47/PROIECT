@@ -9,21 +9,16 @@ using System.Threading.Tasks;
 
 namespace AplicatieStudenti.Pages.Studenti
 {
-    public class CreateModel : PageModel
+    public class CreateModel(AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudentiContext _context;
-
-        public CreateModel(AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+        private readonly AplicatieStudentiContext _context = context;
 
         [BindProperty]
-        public Student Student { get; set; }
+        public required Student Student { get; set; }
 
         // SelectList pentru Cursuri și Profesori
-        public SelectList CursuriSelectList { get; set; }
-        public SelectList ProfesoriSelectList { get; set; }
+        public required SelectList CursuriSelectList { get; set; }
+        public required SelectList ProfesoriSelectList { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
