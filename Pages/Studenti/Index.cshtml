@@ -1,13 +1,13 @@
 ﻿@page
 @model AplicatieStudenti.Pages.Studenti.IndexModel
 @{
-    ViewData["Title"] = "Studenți";
+    ViewData["Title"] = "Studenti";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-page="Create" class="btn btn-primary">Adaugă Student</a>
+    <a asp-page="Create" class="btn btn-primary">Adauga student</a>
 </p>
 
 <table class="table">
@@ -17,7 +17,7 @@
             <th>Nume</th>
             <th>Prenume</th>
             <th>Email</th>
-            <th>Data Nașterii</th>
+            <th>Data Nasterii</th>
             <th></th>
         </tr>
     </thead>
@@ -31,8 +31,9 @@
                 <td>@item.Email</td>
                 <td>@item.DataNasterii.ToString("yyyy-MM-dd")</td>
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Editare</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Detalii</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Stergere</a> 
                 </td>
             </tr>
         }
