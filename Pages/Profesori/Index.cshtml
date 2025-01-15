@@ -38,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.Specializare)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Editare</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.ID" class="btn btn-warning">Editeaza</a> |
                 <a asp-page="./Details" asp-route-id="@item.ID">Detalii</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Stergere</a>
+                <a asp-page="./Delete" asp-route-id="@item.ID" class="btn btn-danger">Sterge</a>
             </td>
         </tr>
 }

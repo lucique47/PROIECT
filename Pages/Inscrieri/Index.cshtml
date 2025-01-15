@@ -29,7 +29,8 @@
                 <td>@(item.Curs?.NumeCurs ?? "N/A")</td>
                 <td>@(item.Profesor?.Nume ?? "N/A") @(item.Profesor?.Prenume ?? "N/A")</td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@item.ID" class="btn btn-warning">Editeaza</a>
+                    <a asp-page="Edit" asp-route-id="@item.ID" class="btn btn-warning">Editeaza</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Detalii</a> |
                     <a asp-page="Delete" asp-route-id="@item.ID" class="btn btn-danger">Sterge</a>
                 </td>
             </tr>

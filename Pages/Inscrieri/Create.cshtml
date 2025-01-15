@@ -17,14 +17,14 @@
     <div class="form-group">
         <label asp-for="Inscriere.CursID" class="control-label">Curs</label>
         <select asp-for="Inscriere.CursID" class="form-control" asp-items="@(ViewData["CursID"] as SelectList)">
-            <option value="">Selectează Cursul</option>
+            <option value="">Selecteaza cursul</option>
         </select>
     </div>
 
     <div class="form-group">
         <label asp-for="Inscriere.ProfesorID" class="control-label">Profesor</label>
         <select asp-for="Inscriere.ProfesorID" class="form-control" asp-items="@(ViewData["ProfesorID"] as SelectList)">
-            <option value="">Selectează Profesorul</option>
+            <option value="">Selecteaza profesorul</option>
         </select>
     </div>
 
