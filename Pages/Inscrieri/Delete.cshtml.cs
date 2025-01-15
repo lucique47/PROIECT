@@ -29,7 +29,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
                 return NotFound();
             }
 
-            var inscriere = await _context.Inscriere.FirstOrDefaultAsync(m => m.ID == id);
+            var inscriere = await _context.Inscrieri.FirstOrDefaultAsync(m => m.ID == id);
 
             if (inscriere == null)
             {
@@ -49,11 +49,11 @@ namespace AplicatieStudenti.Pages.Inscrieri
                 return NotFound();
             }
 
-            var inscriere = await _context.Inscriere.FindAsync(id);
+            var inscriere = await _context.Inscrieri.FindAsync(id);
             if (inscriere != null)
             {
                 Inscriere = inscriere;
-                _context.Inscriere.Remove(Inscriere);
+                _context.Inscrieri.Remove(Inscriere);
                 await _context.SaveChangesAsync();
             }
 

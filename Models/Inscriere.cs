@@ -1,10 +1,11 @@
-﻿namespace AplicatieStudenti.Models
+﻿using AplicatieStudenti.Models;
+
+namespace AplicatieStudenti.Models
 {
     public class Inscriere
     {
         public int ID { get; set; }
 
-        // Chei externe
         public int StudentID { get; set; }
         public Student? Student { get; set; }
 

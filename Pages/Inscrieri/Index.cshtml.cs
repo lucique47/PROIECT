@@ -23,7 +23,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
 
         public async Task OnGetAsync()
         {
-            Inscriere = await _context.Inscriere
+            Inscriere = await _context.Inscrieri
                 .Include(i => i.Curs)
                 .Include(i => i.Profesor)
                 .Include(i => i.Student).ToListAsync();

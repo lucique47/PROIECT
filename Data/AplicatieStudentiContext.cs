@@ -5,7 +5,9 @@ namespace AplicatieStudenti.Data
 {
     public class AplicatieStudentiContext : DbContext
     {
+#pragma warning disable IDE0290 // Use primary constructor
         public AplicatieStudentiContext(DbContextOptions<AplicatieStudentiContext> options)
+#pragma warning restore IDE0290 // Use primary constructor
             : base(options)
         {
         }
@@ -13,7 +15,7 @@ namespace AplicatieStudenti.Data
         public DbSet<Student> Studenti { get; set; }
         public DbSet<Curs> Cursuri { get; set; }
         public DbSet<Profesor> Profesori { get; set; }
-        public DbSet<Inscriere> Inscriere { get; set; }
+        public DbSet<Inscriere> Inscrieri { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -27,7 +27,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
         {
             // Încarcă Inscrierea din baza de date
 #pragma warning disable CS8601 // Possible null reference assignment.
-            Inscriere = await _context.Inscriere
+            Inscriere = await _context.Inscrieri
                 .Include(i => i.Student)
                 .Include(i => i.Curs)
                 .Include(i => i.Profesor)
@@ -77,7 +77,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
 
         private bool InscriereExists(int id)
         {
-            return _context.Inscriere.Any(e => e.ID == id);
+            return _context.Inscrieri.Any(e => e.ID == id);
         }
     }
 }

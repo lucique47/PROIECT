@@ -28,7 +28,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
                 return NotFound();
             }
 
-            var inscriere = await _context.Inscriere.FirstOrDefaultAsync(m => m.ID == id);
+            var inscriere = await _context.Inscrieri.FirstOrDefaultAsync(m => m.ID == id);
             if (inscriere == null)
             {
                 return NotFound();
