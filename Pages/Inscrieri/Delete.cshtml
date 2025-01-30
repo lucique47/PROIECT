@@ -2,30 +2,18 @@
 @model AplicatieStudenti.Pages.Inscrieri.DeleteModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Stergere inscriere";
 }
 
-<h1>Stergere</h1>
+<h1>Stergere inscriere</h1>
 
 <h3>Esti sigur ca vrei sa stergi aceasta inregistrare?</h3>
 <div>
-    <h4>Inscriere</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Inscriere.Student)
-        </dt>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Inscriere.Curs)
-        </dt>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Inscriere.Profesor)
-        </dt>
-    </dl>
 
     <form method="post">
         <input type="hidden" asp-for="Inscriere.ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <input type="submit" value="Sterge" class="btn btn-danger" /> |
         <a asp-page="./Index" class="btn btn-secondary ms-2">Inapoi la lista de inscrieri</a>
     </form>
 </div>

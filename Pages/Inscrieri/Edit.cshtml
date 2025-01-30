@@ -10,6 +10,9 @@
 <hr />
 
 <form method="post">
+
+    <input type="hidden" asp-for="Inscriere.ID" />
+
     <div class="form-group">
         <label for="StudentID">Student</label>
         <select id="StudentID" asp-for="Inscriere.StudentID" class="form-control" asp-items="Model.StudentiSelectList">
@@ -19,7 +22,7 @@
 
     <div class="form-group">
         <label for="CursID">Curs</label>
-        <select id="CursID" asp-for="Inscriere.CursID" class="form-control" asp-items="Model.CursuriSelectList">
+        <select id="CursID" asp-for="Inscriere.CursID" class="form-control" asp-items="Model.CursuriSelectList" onchange="loadProfessors()">
         </select>
         <span asp-validation-for="Inscriere.CursID" class="text-danger"></span>
     </div>
@@ -27,16 +30,43 @@
     <div class="form-group">
         <label for="ProfesorID">Profesor</label>
         <select id="ProfesorID" asp-for="Inscriere.ProfesorID" class="form-control" asp-items="Model.ProfesoriSelectList">
+            <option value="">-- Selecteaza profesor --</option>
         </select>
         <span asp-validation-for="Inscriere.ProfesorID" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Salveaza modificarile</button>
     <a asp-page="./Index" class="btn btn-secondary">Inapoi la lista de inscriere</a>
+
 </form>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+                function loadProfessors() {
+            var cursId = document.getElementById("CursID").value;
+            var profesorSelect = document.getElementById("ProfesorID");
+
+            profesorSelect.innerHTML = '<option value="">-- Selecteaza profesor --</option>';
+
+            if (cursId) {
+                fetch(`/Inscrieri/Edit?handler=ProfesoriPentruCurs&cursId=${cursId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            data.forEach(profesor => {
+                                var option = document.createElement("option");
+                                option.value = profesor.id;
+                                option.textContent = profesor.numeComplet;
+                                profesorSelect.appendChild(option);
+                            });
+                        } else {
+                            var option = document.createElement("option");
+                            option.textContent = "Nu exista profesori pentru acest curs";
+                            profesorSelect.appendChild(option);
+                        }
+                    })
+                    .catch(error => console.error("Eroare la incarcarea profesorilor: ", error));
+            }
+        }
+    </script>
 }

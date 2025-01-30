@@ -11,31 +11,38 @@
 
 <form method="post">
     <input type="hidden" asp-for="Profesor.ID" />
+
     <div class="form-group">
-        <label for="Nume">Nume</label>
-        <input type="text" id="Nume" class="form-control" asp-for="Profesor.Nume" />
+        <label asp-for="Profesor.Nume" class="control-label">Nume</label>
+        <input asp-for="Profesor.Nume" class="form-control" />
         <span asp-validation-for="Profesor.Nume" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label for="Prenume">Prenume</label>
-        <input type="text" id="Prenume" class="form-control" asp-for="Profesor.Prenume" />
+        <label asp-for="Profesor.Prenume" class="control-label">Prenume</label>
+        <input asp-for="Profesor.Prenume" class="form-control" />
         <span asp-validation-for="Profesor.Prenume" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label for="Specializare">Specializare</label>
-        <input type="text" id="Specializare" class="form-control" asp-for="Profesor.Specializare" />
+        <label asp-for="Profesor.Specializare" class="control-label">Specializare</label>
+        <input asp-for="Profesor.Specializare" class="form-control" />
         <span asp-validation-for="Profesor.Specializare" class="text-danger"></span>
     </div>
 
     <div class="form-group">
+        <label class="control-label">Cursuri predate</label>
+        <select asp-for="SelectedCursuri" class="form-control" asp-items="Model.CursuriSelectList" multiple>
+        </select>
+        <small class="form-text text-muted">Apasa CTRL pentru a selecta mai multe cursuri</small>
+    </div>
+
+    <div class="form-group mt-3">
         <button type="submit" class="btn btn-primary">Salveaza modificarile</button>
         <a asp-page="./Index" class="btn btn-secondary">Inapoi la lista de profesori</a>
     </div>
 </form>
 
-@* Validare client-side pentru formular *@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

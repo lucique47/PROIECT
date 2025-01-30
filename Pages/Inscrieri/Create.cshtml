@@ -1,7 +1,16 @@
 ﻿@page
 @model AplicatieStudenti.Pages.Inscrieri.CreateModel
-
+@{
+    ViewData["Title"] = "Adauga inscriere";
+}
 <h2>Adaugare inscriere</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
 <form method="post">
     <div class="form-group">
@@ -43,31 +52,31 @@
 
 @section Scripts {
     <script>
-                function loadProfessors() {
-                    var cursId = document.getElementById("CursID").value;
-                    var profesorSelect = document.getElementById("ProfesorID");
+        function loadProfessors() {
+            var cursId = document.getElementById("CursID").value;
+            var profesorSelect = document.getElementById("ProfesorID");
 
-                profesorSelect.innerHTML = '<option value="">-- Selectează un profesor --</option>';
+            profesorSelect.innerHTML = '<option value="">-- Selecteaza un profesor --</option>';
 
-                if (cursId) {
-                    fetch(`/Inscrieri/Create?handler=ProfesoriPentruCurs&cursId=${cursId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data && data.length > 0) {
-                                data.forEach(profesor => {
-                                    var option = document.createElement("option");
-                                    option.value = profesor.id;
-                                    option.textContent = profesor.numeComplet;
-                                    profesorSelect.appendChild(option);
-                                });
-                            } else {
+            if (cursId) {
+                fetch(`/Inscrieri/Create?handler=ProfesoriPentruCurs&cursId=${cursId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            data.forEach(profesor => {
                                 var option = document.createElement("option");
-                                option.textContent = "Nu exista profesori pentru acest curs.";
+                                option.value = profesor.id;
+                                option.textContent = profesor.numeComplet;
                                 profesorSelect.appendChild(option);
-                            }
-                        })
-                        .catch(error => console.error("Eroare la incarcarea profesorilor:", error));
-                    }
-                }
+                            });
+                        } else {
+                            var option = document.createElement("option");
+                            option.textContent = "Nu exista profesori pentru acest curs";
+                            profesorSelect.appendChild(option);
+                        }
+                    })
+                    .catch(error => console.error("Eroare la incarcarea profesorilor: ", error));
+            }
+        }
     </script>
 }

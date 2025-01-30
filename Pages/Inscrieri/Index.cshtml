@@ -1,10 +1,10 @@
 ﻿@page
 @model AplicatieStudenti.Pages.Inscrieri.IndexModel
 @{
-    ViewData["Title"] = "Lista inscrieri";
+    ViewData["Title"] = "Inscrieri";
 }
 
-<h1>Lista inscrieri</h1>
+<h1>Inscrieri</h1>
 
 <p>
     <a asp-page="./Create" class="btn btn-primary">Adauga inscriere</a>
@@ -13,6 +13,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Student</th>
             <th>Curs</th>
             <th>Profesor</th>
@@ -23,6 +24,7 @@
         @foreach (var item in Model.Inscrieri)
         {
             <tr>
+                <td>@item.ID</td>
                 <td>@item.Student?.Nume @item.Student?.Prenume</td>
                 <td>@item.Curs?.NumeCurs</td>
                 <td>@item.Profesor?.Nume @item.Profesor?.Prenume</td>

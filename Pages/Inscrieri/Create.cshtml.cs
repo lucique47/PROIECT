@@ -49,7 +49,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
             }
             else
             {
-                ProfesorList = []; 
+                ProfesorList = [];
             }
 
             return Page();
@@ -103,15 +103,26 @@ namespace AplicatieStudenti.Pages.Inscrieri
                 return Page();
             }
 
+            bool alreadyEnrolled = await _context.Inscrieri
+                .AnyAsync(i => i.StudentID == Inscriere.StudentID &&
+                               i.CursID == Inscriere.CursID &&
+                               i.ProfesorID == Inscriere.ProfesorID);
+
+            if (alreadyEnrolled)
+            {
+                TempData["ErrorMessage"] = "Studentul este deja inscris la acest curs cu acest profesor";
+                return RedirectToPage("./Create");
+            }
 
             bool profesorValid = await _context.ProfesorCursuri
                 .AnyAsync(pc => pc.ProfesorId == Inscriere.ProfesorID && pc.CursId == Inscriere.CursID);
 
             if (!profesorValid)
             {
-                ModelState.AddModelError(string.Empty, "Profesorul selectat nu este asociat cu acest curs.");
+                ModelState.AddModelError(string.Empty, "Profesorul selectat nu este asociat cu acest curs");
                 return Page();
             }
+
             _context.Inscrieri.Add(Inscriere);
             await _context.SaveChangesAsync();
 

@@ -2,14 +2,13 @@
 @model AplicatieStudenti.Pages.Profesori.DeleteModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Stergere profesor";
 }
 
-<h1>Stergere</h1>
+<h1>Stergere profesor</h1>
 
 <h3>Esti sigur ca vrei sa stergi aceasta inregistrare?</h3>
 <div>
-    <h4>Profesor</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -34,7 +33,7 @@
     
     <form method="post">
         <input type="hidden" asp-for="Profesor.ID" />
-        <input type="submit" value="Stergere" class="btn btn-danger" /> |
+        <input type="submit" value="Sterge" class="btn btn-danger" /> |
         <a asp-page="./Index" class="btn btn-secondary ms-2">Inapoi la lista de profesori</a>
     </form>
 </div>

@@ -2,13 +2,12 @@
 @model AplicatieStudenti.Pages.Profesori.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalii profesor";
 }
 
-<h1>Detalii</h1>
+<h1>Detalii profesor</h1>
 
 <div>
-    <h4>Profesor</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -31,6 +30,18 @@
         </dd>
     </dl>
 </div>
+
+<div>
+    <h4>Cursuri predate</h4>
+    <hr />
+    <ul>
+        @foreach (var curs in Model.Cursuri)
+        {
+            <li>@curs.NumeCurs</li>
+        }
+    </ul>
+</div>
+
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Profesor.ID" class="btn btn-primary btn-warning">Editare</a> |
     <a asp-page="./Index" class="btn btn-secondary ms-2">Inapoi la lista de profesori</a>

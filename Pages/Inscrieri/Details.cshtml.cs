@@ -23,7 +23,12 @@ namespace AplicatieStudenti.Pages.Inscrieri
                 return NotFound();
             }
 
-            var inscriere = await _context.Inscrieri.FirstOrDefaultAsync(m => m.ID == id);
+            var inscriere = await _context.Inscrieri
+                .Include(i => i.Student)  
+                .Include(i => i.Curs)     
+                .Include(i => i.Profesor) 
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (inscriere == null)
             {
                 return NotFound();
@@ -32,6 +37,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
             {
                 Inscriere = inscriere;
             }
+
             return Page();
         }
     }

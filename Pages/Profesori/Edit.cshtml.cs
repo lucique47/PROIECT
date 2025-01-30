@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AplicatieStudenti.Pages.Profesori
 {
@@ -12,6 +13,11 @@ namespace AplicatieStudenti.Pages.Profesori
         [BindProperty]
         public Profesor Profesor { get; set; } = default!;
 
+        [BindProperty]
+        public List<int> SelectedCursuri { get; set; } = [];
+
+        public SelectList CursuriSelectList { get; set; } = default!;
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -19,16 +25,26 @@ namespace AplicatieStudenti.Pages.Profesori
                 return NotFound();
             }
 
-            var profesor = await _context.Profesori.FirstOrDefaultAsync(m => m.ID == id);
+            var profesor = await _context.Profesori
+                .Include(p => p.ProfesorCursuri)
+                .ThenInclude(pc => pc.Curs)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (profesor == null)
             {
                 return NotFound();
             }
+
             Profesor = profesor;
+
+            var cursuri = await _context.Cursuri.ToListAsync();
+            CursuriSelectList = new SelectList(cursuri, "ID", "NumeCurs");
+
+            SelectedCursuri = Profesor.ProfesorCursuri.Select(pc => pc.CursId).ToList();
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -36,9 +52,41 @@ namespace AplicatieStudenti.Pages.Profesori
                 return Page();
             }
 
+            var profesorToUpdate = await _context.Profesori
+                .Include(p => p.ProfesorCursuri)
+                .FirstOrDefaultAsync(p => p.ID == Profesor.ID);
+
+            if (profesorToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            profesorToUpdate.Nume = Profesor.Nume;
+            profesorToUpdate.Prenume = Profesor.Prenume;
+            profesorToUpdate.Specializare = Profesor.Specializare;
+
+            profesorToUpdate.ProfesorCursuri.Clear();
+
+            if (SelectedCursuri != null)
+            {
+                foreach (var cursId in SelectedCursuri)
+                {
+                    var curs = await _context.Cursuri.FindAsync(cursId);
+                    if (curs != null)
+                    {
+                        profesorToUpdate.ProfesorCursuri.Add(new ProfesorCurs
+                        {
+                            CursId = cursId,
+                            ProfesorId = profesorToUpdate.ID,
+                            Profesor = profesorToUpdate,
+                            Curs = curs
+                        });
+                    }
+                }
+            }
+
             try
             {
-                _context.Attach(Profesor).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

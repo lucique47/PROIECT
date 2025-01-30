@@ -21,25 +21,57 @@ namespace AplicatieStudenti.Pages.Inscrieri
         public required SelectList CursuriSelectList { get; set; }
         public required SelectList ProfesoriSelectList { get; set; }
 
+        public async Task<Inscriere?> GetInscriereAsync(int id)
+        {
+            return await _context.Inscrieri
+                        .Include(i => i.Student)
+                        .Include(i => i.Curs)
+                        .Include(i => i.Profesor)
+                        .FirstOrDefaultAsync(m => m.ID == id);
+        }
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
-#pragma warning disable CS8601
-            Inscriere = await _context.Inscrieri
-                .Include(i => i.Student)
-                .Include(i => i.Curs)
-                .Include(i => i.Profesor)
-                .FirstOrDefaultAsync(m => m.ID == id);
-#pragma warning restore CS8601
+            var inscriere = await GetInscriereAsync(id);
 
-            if (Inscriere == null)
+            if (inscriere == null)
             {
                 return NotFound();
             }
+
+            Inscriere = inscriere;
+
+            
             StudentiSelectList = new SelectList(await _context.Studenti.ToListAsync(), "ID", "Nume");
+
+            
             CursuriSelectList = new SelectList(await _context.Cursuri.ToListAsync(), "ID", "NumeCurs");
-            ProfesoriSelectList = new SelectList(await _context.Profesori.ToListAsync(), "ID", "Nume");
+
+            
+            ProfesoriSelectList = new SelectList(await _context.ProfesorCursuri
+                .Where(pc => pc.CursId == Inscriere.CursID)
+                .Select(pc => new
+                {
+                    Id = pc.ProfesorId,
+                    NumeComplet = pc.Profesor.Nume + " " + pc.Profesor.Prenume
+                })
+                .ToListAsync(), "Id", "NumeComplet");
 
             return Page();
+        }
+        public async Task<IActionResult> OnGetProfesoriPentruCursAsync(int cursId)
+        {
+            var profesori = await _context.ProfesorCursuri
+               .Where(pc => pc.CursId == cursId)
+               .Select(pc => new
+               {
+                   id = pc.ProfesorId,
+                   numeComplet = pc.Profesor.Nume + " " + pc.Profesor.Prenume
+               })
+               .Distinct()
+               .ToListAsync();
+
+            return new JsonResult(profesori);
         }
 
         public async Task<IActionResult> OnPostAsync()

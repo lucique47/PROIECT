@@ -10,16 +10,12 @@ using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Profesori
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel(AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public DetailsModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+        private readonly AplicatieStudentiContext _context = context;
 
         public Profesor Profesor { get; set; } = default!;
+        public List<Curs> Cursuri { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -36,6 +32,10 @@ namespace AplicatieStudenti.Pages.Profesori
             else
             {
                 Profesor = profesor;
+                Cursuri = await _context.ProfesorCursuri
+                    .Where(pc => pc.ProfesorId == profesor.ID)
+                    .Select(pc => pc.Curs)
+                    .ToListAsync();
             }
             return Page();
         }

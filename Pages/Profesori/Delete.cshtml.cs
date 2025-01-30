@@ -10,14 +10,9 @@ using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Profesori
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel(AplicatieStudenti.Data.AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public DeleteModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context = context;
 
         [BindProperty]
         public Profesor Profesor { get; set; } = default!;
