@@ -1,19 +1,18 @@
 ﻿@page
 @model AplicatieStudenti.Pages.Inscrieri.IndexModel
 @{
-    ViewData["Title"] = "Lista de inscriere";
+    ViewData["Title"] = "Lista inscrieri";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>Lista inscrieri</h1>
 
 <p>
-    <a asp-page="/Inscrieri/Create" class="btn btn-primary">Adauga o inscriere</a>
+    <a asp-page="./Create" class="btn btn-primary">Adauga inscriere</a>
 </p>
 
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Student</th>
             <th>Curs</th>
             <th>Profesor</th>
@@ -21,17 +20,16 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Inscriere)
+        @foreach (var item in Model.Inscrieri)
         {
             <tr>
-                <td>@item.ID</td>
-                <td>@(item.Student?.Nume ?? "N/A") @(item.Student?.Prenume ?? "N/A")</td>
-                <td>@(item.Curs?.NumeCurs ?? "N/A")</td>
-                <td>@(item.Profesor?.Nume ?? "N/A") @(item.Profesor?.Prenume ?? "N/A")</td>
+                <td>@item.Student?.Nume @item.Student?.Prenume</td>
+                <td>@item.Curs?.NumeCurs</td>
+                <td>@item.Profesor?.Nume @item.Profesor?.Prenume</td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@item.ID" class="btn btn-warning">Editeaza</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ID">Detalii</a> |
-                    <a asp-page="Delete" asp-route-id="@item.ID" class="btn btn-danger">Sterge</a>
+                    <a asp-page="./Edit" asp-route-id="@item.ID" class="btn btn-primary btn-warning">Editeaza</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID" class="btn btn-info btn-sm">Detalii</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID" class="btn btn-danger btn-danger">Sterge</a>
                 </td>
             </tr>
         }

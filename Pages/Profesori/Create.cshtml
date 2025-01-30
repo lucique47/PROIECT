@@ -1,31 +1,67 @@
 ﻿@page
 @model AplicatieStudenti.Pages.Profesori.CreateModel
 @{
-    ViewData["Title"] = "Adauga profesor";
+
+    ViewData
+[
+"Title"
+]
+ 
+=
+ 
+"Adauga profesor"
+;
+
 }
+
 
 <h1>@ViewData["Title"]</h1>
 
+<div asp-validation-summary="All" class="text-danger"></div>
+
 <form method="post">
-    <div class="form-group">
-        <label for="Nume">Nume</label>
-        <input type="text" id="Nume" class="form-control" asp-for="Profesor.Nume" />
+    <div class="form-group mb-3">
+        <label asp-for="Profesor.Nume" class="control-label">Nume</label>
+        <input asp-for="Profesor.Nume" class="form-control" />
         <span asp-validation-for="Profesor.Nume" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label for="Prenume">Prenume</label>
-        <input type="text" id="Prenume" class="form-control" asp-for="Profesor.Prenume" />
+    <div class="form-group mb-3">
+        <label asp-for="Profesor.Prenume" class="control-label">Prenume</label>
+        <input asp-for="Profesor.Prenume" class="form-control" />
         <span asp-validation-for="Profesor.Prenume" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label for="Specializare">Specializare</label>
-        <input type="text" id="Specializare" class="form-control" asp-for="Profesor.Specializare" />
+    <div class="form-group mb-3">
+        <label asp-for="Profesor.Specializare" class="control-label">Specializare</label>
+        <input asp-for="Profesor.Specializare" class="form-control" />
         <span asp-validation-for="Profesor.Specializare" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Adauga profesor</button>
+    <div class="form-group mb-3">
+        <label class="control-label">Cursuri predate</label>
+        <select asp-for="SelectedCursuri" class="form-control" asp-items="Model.CursuriSelectList" multiple>
+        </select>
+        <small class="form-text text-muted">Apasati CTRL pentru a selecta mai multe cursuri</small>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Adauga profesor</button>
+        <a asp-page="./Index" class="btn btn-secondary ms-2">Inapoi la lista de profesori</a>
+    </div>
 </form>
 
-<a asp-page="./Index">Inapoi la lista de profesori</a>
+@section Scripts {
+    
+@{
+await
+ Html
+.
+RenderPartialAsync
+(
+"_ValidationScriptsPartial"
+)
+;
+}
+
+}

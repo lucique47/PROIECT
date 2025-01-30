@@ -1,20 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace PROIECT.Pages
+namespace AplicatieStudenti.Pages
 {
-    public class PrivacyModel : PageModel
+    public class PrivacyModel(ILogger<PrivacyModel> logger) : PageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
-
-        public PrivacyModel(ILogger<PrivacyModel> logger)
-        {
-            _logger = logger;
-        }
+#pragma warning disable IDE0052 // Remove unread private members
+        private readonly ILogger<PrivacyModel> _logger = logger;
+#pragma warning restore IDE0052 // Remove unread private members
 
         public void OnGet()
         {
         }
     }
-
 }

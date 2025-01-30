@@ -1,44 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using AplicatieStudenti.Data;
+﻿using AplicatieStudenti.Data;
 using AplicatieStudenti.Models;
-
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
 namespace AplicatieStudenti.Pages.Cursuri
 {
-    public class CreateModel : PageModel
-    {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
 
-        public CreateModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+    public class CreateModel(AplicatieStudentiContext context) : PageModel
+    {
+        private readonly AplicatieStudentiContext _context = context;
 
         public IActionResult OnGet()
         {
+            Curs = new Curs
+            {
+                ProfesorCursuri = [],
+                Inscriere = []
+            };
             return Page();
         }
 
         [BindProperty]
-        public Curs Curs { get; set; } = default!;
+        public required Curs Curs { get; set; }
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    return Page();
+                }
+
+                Curs.ProfesorCursuri = [];
+                Curs.Inscriere = [];
+
+                _context.Cursuri.Add(Curs);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "A aparut o eroare la salvarea cursului: " + ex.Message);
                 return Page();
             }
-
-            _context.Cursuri.Add(Curs);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
         }
     }
 }

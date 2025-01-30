@@ -17,29 +17,24 @@ namespace AplicatieStudenti.Pages.Inscrieri
 
         [BindProperty]
         public required Inscriere Inscriere { get; set; }
-
-        // Proprietăți pentru listele derulante
         public required SelectList StudentiSelectList { get; set; }
         public required SelectList CursuriSelectList { get; set; }
         public required SelectList ProfesoriSelectList { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            // Încarcă Inscrierea din baza de date
-#pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CS8601
             Inscriere = await _context.Inscrieri
                 .Include(i => i.Student)
                 .Include(i => i.Curs)
                 .Include(i => i.Profesor)
                 .FirstOrDefaultAsync(m => m.ID == id);
-#pragma warning restore CS8601 // Possible null reference assignment.
+#pragma warning restore CS8601
 
             if (Inscriere == null)
             {
                 return NotFound();
             }
-
-            // Populează listele derulante
             StudentiSelectList = new SelectList(await _context.Studenti.ToListAsync(), "ID", "Nume");
             CursuriSelectList = new SelectList(await _context.Cursuri.ToListAsync(), "ID", "NumeCurs");
             ProfesoriSelectList = new SelectList(await _context.Profesori.ToListAsync(), "ID", "Nume");

@@ -10,20 +10,15 @@ using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Inscrieri
 {
-    public class IndexModel : PageModel
+    public class IndexModel(AplicatieStudenti.Data.AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
+        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context = context;
 
-        public IndexModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
-
-        public IList<Inscriere> Inscriere { get;set; } = default!;
+        public IList<Inscriere> Inscrieri { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Inscriere = await _context.Inscrieri
+            Inscrieri = await _context.Inscrieri
                 .Include(i => i.Curs)
                 .Include(i => i.Profesor)
                 .Include(i => i.Student).ToListAsync();

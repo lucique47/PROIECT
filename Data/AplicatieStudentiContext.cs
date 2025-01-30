@@ -3,50 +3,45 @@ using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Data
 {
-    public class AplicatieStudentiContext : DbContext
+    public class AplicatieStudentiContext(DbContextOptions<AplicatieStudentiContext> options) : DbContext(options)
     {
-#pragma warning disable IDE0290 // Use primary constructor
-        public AplicatieStudentiContext(DbContextOptions<AplicatieStudentiContext> options)
-#pragma warning restore IDE0290 // Use primary constructor
-            : base(options)
-        {
-        }
 
+       
+        public DbSet<Inscriere> Inscrieri { get; set; }
         public DbSet<Student> Studenti { get; set; }
         public DbSet<Curs> Cursuri { get; set; }
         public DbSet<Profesor> Profesori { get; set; }
-        public DbSet<Inscriere> Inscrieri { get; set; }
+        public DbSet<ProfesorCurs> ProfesorCursuri { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Relație many-to-many între Studenți și Cursuri
-            modelBuilder.Entity<Student>()
-                .HasMany(s => s.CursuriInscrise)
-                .WithMany(c => c.StudentiInscrisi)
-                .UsingEntity(j => j.ToTable("StudentCurs"));
-
-            // Relație many-to-many între Profesori și Cursuri
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Profesor>()
                 .HasMany(p => p.CursuriPredate)
                 .WithMany(c => c.Profesori)
-                .UsingEntity(j => j.ToTable("ProfesorCurs"));
+                .UsingEntity<ProfesorCurs>(
+                    j => j.HasOne(pc => pc.Curs).WithMany(c => c.ProfesorCursuri).HasForeignKey(pc => pc.CursId),
+                    j => j.HasOne(pc => pc.Profesor).WithMany(p => p.ProfesorCursuri).HasForeignKey(pc => pc.ProfesorId),
+                    j => j.ToTable("ProfesorCurs")
+                );
 
-            // Relație many-to-many între Studenți, Cursuri și Profesori
             modelBuilder.Entity<Inscriere>()
                 .HasOne(i => i.Student)
                 .WithMany(s => s.Inscriere)
-                .HasForeignKey(i => i.StudentID);
+                .HasForeignKey(i => i.StudentID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Inscriere>()
                 .HasOne(i => i.Curs)
                 .WithMany(c => c.Inscriere)
-                .HasForeignKey(i => i.CursID);
+                .HasForeignKey(i => i.CursID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Inscriere>()
                 .HasOne(i => i.Profesor)
                 .WithMany(p => p.Inscriere)
-                .HasForeignKey(i => i.ProfesorID);
+                .HasForeignKey(i => i.ProfesorID)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
-

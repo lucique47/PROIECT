@@ -8,7 +8,8 @@ namespace AplicatieStudenti.Models
         public string? NumeCurs { get; set; }
         public string? Descriere { get; set; }
         public ICollection<Student>? StudentiInscrisi { get; set; }
-        public ICollection<Profesor>? Profesori { get; set; }
-        public ICollection<Inscriere>? Inscriere { get; set; }
+        public ICollection<Profesor>? Profesori { get; set; } = [];
+        public ICollection<Inscriere>? Inscriere { get; set; } = [];
+        public ICollection<ProfesorCurs>? ProfesorCursuri { get; set; }
     }
 }

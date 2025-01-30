@@ -19,7 +19,7 @@
                         <a class="nav-link" asp-page="/Index">Homepage</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-page="/Inscrieri/Create">Inscriere</a>
+                        <a class="nav-link" asp-page="/Inscrieri/Index">Inscrieri</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-page="/Studenti/Index">Studenti</a>
@@ -34,19 +34,18 @@
             </div>
         </nav>
     </header>
-
     <div class="container">
         @RenderBody()
     </div>
 
-    <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
-    <!-- Include Popper.js pentru Bootstrap 4 -->
+    <!-- Scripturi de bază -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-
-    <!-- Include Bootstrap 4 -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    @RenderSection("Scripts", required: false)
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <!-- Scripturi specifice paginii -->
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

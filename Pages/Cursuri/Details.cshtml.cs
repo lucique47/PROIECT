@@ -10,14 +10,9 @@ using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Cursuri
 {
-    public class DetailsModel : PageModel
+    public class DetailsModel(AplicatieStudenti.Data.AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public DetailsModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context = context;
 
         public Curs Curs { get; set; } = default!;
 

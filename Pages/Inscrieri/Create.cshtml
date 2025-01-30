@@ -1,34 +1,73 @@
 ﻿@page
 @model AplicatieStudenti.Pages.Inscrieri.CreateModel
-@{
-    ViewData["Title"] = "Inscriere noua";
-}
 
-<h1>Inscriere noua</h1>
+<h2>Adaugare inscriere</h2>
 
 <form method="post">
     <div class="form-group">
-        <label asp-for="Inscriere.StudentID" class="control-label">Student</label>
-        <select asp-for="Inscriere.StudentID" class="form-control" asp-items="@(ViewData["StudentID"] as SelectList)">
-            <option value="">Selecteaza studentul</option>
+        <label for="StudentID">Student</label>
+        <select id="StudentID" name="Inscriere.StudentID" class="form-control">
+            <option value="">-- Selecteaza student --</option>
+            @foreach (var student in ViewData["StudentList"] as List<SelectListItem> ?? new List<SelectListItem>())
+            {
+                <option value="@student.Value">@student.Text</option>
+            }
         </select>
     </div>
 
     <div class="form-group">
-        <label asp-for="Inscriere.CursID" class="control-label">Curs</label>
-        <select asp-for="Inscriere.CursID" class="form-control" asp-items="@(ViewData["CursID"] as SelectList)">
-            <option value="">Selecteaza cursul</option>
+        <label for="CursID">Curs</label>
+        <select id="CursID" name="Inscriere.CursID" class="form-control" onchange="loadProfessors()">
+            <option value="">-- Selecteaza curs --</option>
+            @foreach (var curs in Model.CursList)
+            {
+                <option value="@curs.Value">@curs.Text</option>
+            }
         </select>
     </div>
 
     <div class="form-group">
-        <label asp-for="Inscriere.ProfesorID" class="control-label">Profesor</label>
-        <select asp-for="Inscriere.ProfesorID" class="form-control" asp-items="@(ViewData["ProfesorID"] as SelectList)">
-            <option value="">Selecteaza profesorul</option>
+        <label for="ProfesorID">Profesor</label>
+        <select id="ProfesorID" name="Inscriere.ProfesorID" class="form-control">
+            <option value="">-- Selecteaza profesor --</option>
+            @foreach (var profesor in Model.ProfesorList)
+            {
+                <option value="@profesor.Value" selected="@(profesor.Value == Model.Inscriere.ProfesorID.ToString() ? "selected" : "")">@profesor.Text</option>
+            }
         </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Salveaza</button>
+    <button type="submit" class="btn btn-primary">Adauga inscriere</button>
+    <a asp-page="./Index" class="btn btn-secondary ms-2">Inapoi la lista de inscrieri</a>
 </form>
 
-<a asp-page="./Index">Inapoi la lista de inscriere</a>
+@section Scripts {
+    <script>
+                function loadProfessors() {
+                    var cursId = document.getElementById("CursID").value;
+                    var profesorSelect = document.getElementById("ProfesorID");
+
+                profesorSelect.innerHTML = '<option value="">-- Selectează un profesor --</option>';
+
+                if (cursId) {
+                    fetch(`/Inscrieri/Create?handler=ProfesoriPentruCurs&cursId=${cursId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                data.forEach(profesor => {
+                                    var option = document.createElement("option");
+                                    option.value = profesor.id;
+                                    option.textContent = profesor.numeComplet;
+                                    profesorSelect.appendChild(option);
+                                });
+                            } else {
+                                var option = document.createElement("option");
+                                option.textContent = "Nu exista profesori pentru acest curs.";
+                                profesorSelect.appendChild(option);
+                            }
+                        })
+                        .catch(error => console.error("Eroare la incarcarea profesorilor:", error));
+                    }
+                }
+    </script>
+}

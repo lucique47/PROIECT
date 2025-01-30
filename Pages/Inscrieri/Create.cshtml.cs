@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using AplicatieStudenti.Data;
 using AplicatieStudenti.Models;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace AplicatieStudenti.Pages.Inscrieri
 {
@@ -14,35 +12,106 @@ namespace AplicatieStudenti.Pages.Inscrieri
         private readonly AplicatieStudentiContext _context = context;
 
         [BindProperty]
-        public required Inscriere Inscriere { get; set; }
+        public Inscriere Inscriere { get; set; } = new Inscriere();
+
+        public List<SelectListItem> CursList { get; set; } = [];
+        public List<SelectListItem> ProfesorList { get; set; } = [];
 
         public async Task<IActionResult> OnGetAsync()
         {
-            // Populăm lista de studenți cu Nume și Prenume
-            ViewData["StudentID"] = new SelectList(await _context.Studenti
-                .Select(s => new { s.ID, NumeComplet = s.Nume + " " + s.Prenume })
-                .ToListAsync(), "ID", "NumeComplet");
 
-            // Populăm lista de cursuri cu Numele cursului
-            ViewData["CursID"] = new SelectList(await _context.Cursuri
-                .Select(c => new { c.ID, c.NumeCurs })
-                .ToListAsync(), "ID", "NumeCurs");
+            ViewData["StudentList"] = await _context.Studenti
+                .Select(s => new SelectListItem
+                {
+                    Value = s.ID.ToString(),
+                    Text = $"{s.Nume} {s.Prenume}"
+                })
+                .ToListAsync();
 
-            // Populăm lista de profesori cu Numele complet
-            ViewData["ProfesorID"] = new SelectList(await _context.Profesori
-                .Select(p => new { p.ID, NumeComplet = p.Nume + " " + p.Prenume })
-                .ToListAsync(), "ID", "NumeComplet");
+            CursList = await _context.Cursuri
+                .Select(c => new SelectListItem
+                {
+                    Value = c.ID.ToString(),
+                    Text = c.NumeCurs
+                })
+                .ToListAsync();
+
+            if (Inscriere.CursID != 0)
+            {
+                ProfesorList = await _context.ProfesorCursuri
+                    .Where(pc => pc.CursId == Inscriere.CursID)
+                    .Select(pc => new SelectListItem
+                    {
+                        Value = pc.ProfesorId.ToString(),
+                        Text = pc.Profesor.Nume + " " + pc.Profesor.Prenume
+                    })
+                    .ToListAsync();
+            }
+            else
+            {
+                ProfesorList = []; 
+            }
 
             return Page();
+        }
+        public async Task<IActionResult> OnGetProfesoriPentruCursAsync(int cursId)
+        {
+            var profesori = await _context.ProfesorCursuri
+               .Where(pc => pc.CursId == cursId)
+               .Select(pc => new
+               {
+                   id = pc.ProfesorId,
+                   numeComplet = pc.Profesor.Nume + " " + pc.Profesor.Prenume
+               })
+               .Distinct()
+               .ToListAsync();
+            return new JsonResult(profesori);
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                ViewData["StudentList"] = await _context.Studenti
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.ID.ToString(),
+                        Text = $"{s.Nume} {s.Prenume}"
+                    })
+                    .ToListAsync();
+
+                CursList = await _context.Cursuri
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.ID.ToString(),
+                        Text = c.NumeCurs
+                    })
+                    .ToListAsync();
+
+                if (Inscriere.CursID != 0)
+                {
+                    ProfesorList = await _context.ProfesorCursuri
+                        .Where(pc => pc.CursId == Inscriere.CursID)
+                        .Select(pc => new SelectListItem
+                        {
+                            Value = pc.ProfesorId.ToString(),
+                            Text = pc.Profesor.Nume + " " + pc.Profesor.Prenume
+                        })
+                        .ToListAsync();
+                }
+
                 return Page();
             }
 
+
+            bool profesorValid = await _context.ProfesorCursuri
+                .AnyAsync(pc => pc.ProfesorId == Inscriere.ProfesorID && pc.CursId == Inscriere.CursID);
+
+            if (!profesorValid)
+            {
+                ModelState.AddModelError(string.Empty, "Profesorul selectat nu este asociat cu acest curs.");
+                return Page();
+            }
             _context.Inscrieri.Add(Inscriere);
             await _context.SaveChangesAsync();
 
@@ -50,3 +119,4 @@ namespace AplicatieStudenti.Pages.Inscrieri
         }
     }
 }
+

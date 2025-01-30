@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AplicatieStudenti.Data;
+﻿using AplicatieStudenti.Data;
 using AplicatieStudenti.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AplicatieStudenti.Pages.Cursuri
 {
-    public class EditModel : PageModel
+    public class EditModel(AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public EditModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+        private readonly AplicatieStudentiContext _context = context;
 
         [BindProperty]
-        public Curs Curs { get; set; } = default!;
+        public required Curs Curs { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,29 +20,44 @@ namespace AplicatieStudenti.Pages.Cursuri
                 return NotFound();
             }
 
-            var curs =  await _context.Cursuri.FirstOrDefaultAsync(m => m.ID == id);
-            if (curs == null)
+#pragma warning disable CS8601 
+            Curs = await _context.Cursuri
+                .Include(c => c.ProfesorCursuri)
+                .Include(c => c.Inscriere)
+                .FirstOrDefaultAsync(m => m.ID == id);
+#pragma warning restore CS8601 
+
+            if (Curs == null)
             {
                 return NotFound();
             }
-            Curs = curs;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Curs).State = EntityState.Modified;
-
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return Page();
+                }
+
+                var cursToUpdate = await _context.Cursuri
+                    .Include(c => c.ProfesorCursuri)
+                    .Include(c => c.Inscriere)
+                    .FirstOrDefaultAsync(c => c.ID == Curs.ID);
+
+                if (cursToUpdate == null)
+                {
+                    return NotFound();
+                }
+
+                cursToUpdate.NumeCurs = Curs.NumeCurs;
+                cursToUpdate.Descriere = Curs.Descriere;
+
                 await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -65,8 +70,6 @@ namespace AplicatieStudenti.Pages.Cursuri
                     throw;
                 }
             }
-
-            return RedirectToPage("./Index");
         }
 
         private bool CursExists(int id)

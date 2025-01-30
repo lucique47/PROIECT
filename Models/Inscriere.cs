@@ -1,4 +1,5 @@
-﻿using AplicatieStudenti.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Models
 {
