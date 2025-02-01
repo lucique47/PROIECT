@@ -42,31 +42,33 @@
 
 @section Scripts {
     <script>
-                function loadProfessors() {
-            var cursId = document.getElementById("CursID").value;
-            var profesorSelect = document.getElementById("ProfesorID");
+        // Functia care incarca profesorii in functie de cursul selectat
+            function loadProfessors() {
+                var cursId = document.getElementById("CursID").value; // Obtine ID-ul cursului selectat
+                var profesorSelect = document.getElementById("ProfesorID"); // Selecteaza dropdown-ul pentru profesori
 
-            profesorSelect.innerHTML = '<option value="">-- Selecteaza profesor --</option>';
-
-            if (cursId) {
-                fetch(`/Inscrieri/Edit?handler=ProfesoriPentruCurs&cursId=${cursId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.length > 0) {
-                            data.forEach(profesor => {
+                profesorSelect.innerHTML = '<option value="">-- Selecteaza profesor --</option>'; // Reseteaza lista de profesori
+                // Daca exista un curs selectat, trimite o cerere AJAX pentru a incarca profesorii asociati cu cursul
+                if (cursId) {
+                    fetch(`/Inscrieri/Edit?handler=ProfesoriPentruCurs&cursId=${cursId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data && data.length > 0) {
+                                data.forEach(profesor => {
+                                    var option = document.createElement("option");
+                                    option.value = profesor.id;
+                                    option.textContent = profesor.numeComplet;
+                                    profesorSelect.appendChild(option); // Adauga optiunea in dropdown
+                                });
+                            } else {
+                                // Daca nu exista profesori, afiseaza un mesaj in dropdown
                                 var option = document.createElement("option");
-                                option.value = profesor.id;
-                                option.textContent = profesor.numeComplet;
+                                option.textContent = "Nu exista profesori pentru acest curs";
                                 profesorSelect.appendChild(option);
-                            });
-                        } else {
-                            var option = document.createElement("option");
-                            option.textContent = "Nu exista profesori pentru acest curs";
-                            profesorSelect.appendChild(option);
-                        }
-                    })
-                    .catch(error => console.error("Eroare la incarcarea profesorilor: ", error));
+                            }
+                        })
+                        .catch(error => console.error("Eroare la incarcarea profesorilor: ", error));
+                }
             }
-        }
     </script>
 }

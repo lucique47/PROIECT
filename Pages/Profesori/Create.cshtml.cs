@@ -24,16 +24,16 @@ namespace AplicatieStudenti.Pages.Profesori
         public List<int> SelectedCursuri { get; set; } = [];
 
         public SelectList CursuriSelectList { get; set; } = default!;
-
+        // Metoda care incarca pagina cu lista de cursuri
         public async Task<IActionResult> OnGetAsync()
         {
             
-            var cursuri = await _context.Cursuri.ToListAsync();
-            CursuriSelectList = new SelectList(cursuri, "ID", "NumeCurs");
+            var cursuri = await _context.Cursuri.ToListAsync(); // Obtinere cursuri din baza de date
+            CursuriSelectList = new SelectList(cursuri, "ID", "NumeCurs"); // Popularea listei de cursuri pentru dropdown
 
             return Page();
         }
-
+        // Metoda care se apeleaza la trimiterea formularului
         public async Task<IActionResult> OnPostAsync()
         {
             try
@@ -45,7 +45,7 @@ namespace AplicatieStudenti.Pages.Profesori
                     return Page();
                 }
 
-                
+                // Verifica daca toate campurile necesare sunt completate
                 if (string.IsNullOrWhiteSpace(Profesor.Nume))
                 {
                     ModelState.AddModelError("Profesor.Nume", "Numele este obligatoriu");
@@ -67,18 +67,18 @@ namespace AplicatieStudenti.Pages.Profesori
                             .Select(e => e.ErrorMessage)));
 
                     
-                    var cursuri = await _context.Cursuri.ToListAsync();
-                    CursuriSelectList = new SelectList(cursuri, "ID", "NumeCurs");
+                    var cursuri = await _context.Cursuri.ToListAsync(); // Obtinere cursuri din baza de date
+                    CursuriSelectList = new SelectList(cursuri, "ID", "NumeCurs"); // Populeaza lista de cursuri
 
                     return Page();
                 }
 
-               
+                // Initializare liste goale pentru relatiile cu cursurile
                 Profesor.CursuriPredate = [];
                 Profesor.Inscriere = [];
                 Profesor.ProfesorCursuri = [];
 
-                
+                // Daca utilizatorul a selectat cursuri, le adauga pentru profesor
                 if (SelectedCursuri != null && SelectedCursuri.Count != 0)
                 {
                     foreach (var cursId in SelectedCursuri)
@@ -87,11 +87,11 @@ namespace AplicatieStudenti.Pages.Profesori
                         {
                             CursId = cursId,
                             Profesor = Profesor,
-                            Curs = await _context.Cursuri.FindAsync(cursId) ?? throw new InvalidOperationException("Cursul nu a fost gasit")
+                            Curs = await _context.Cursuri.FindAsync(cursId) ?? throw new InvalidOperationException("Cursul nu a fost gasit") // Cauta cursul in baza de date
                         });
                     }
                 }
-
+                // Adauga profesorul in baza de date
                 _context.Profesori.Add(Profesor);
                 await _context.SaveChangesAsync();
 

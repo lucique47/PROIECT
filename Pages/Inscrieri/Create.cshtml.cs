@@ -13,13 +13,13 @@ namespace AplicatieStudenti.Pages.Inscrieri
 
         [BindProperty]
         public Inscriere Inscriere { get; set; } = new Inscriere();
-
+        // Listele de cursuri si profesori vor fi populate din baza de date
         public List<SelectListItem> CursList { get; set; } = [];
         public List<SelectListItem> ProfesorList { get; set; } = [];
-
+        // Metoda care se executa atunci cand pagina este accesata (GET request)
         public async Task<IActionResult> OnGetAsync()
         {
-
+            // Populeaza lista de studenti din baza de date si o trimite catre ViewData pentru a fi utilizata in formular
             ViewData["StudentList"] = await _context.Studenti
                 .Select(s => new SelectListItem
                 {
@@ -27,7 +27,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
                     Text = $"{s.Nume} {s.Prenume}"
                 })
                 .ToListAsync();
-
+            // Populeaza lista de cursuri din baza de date si o trimite catre ViewData
             CursList = await _context.Cursuri
                 .Select(c => new SelectListItem
                 {
@@ -35,7 +35,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
                     Text = c.NumeCurs
                 })
                 .ToListAsync();
-
+            // Daca exista un CursID selectat, se populeaza lista de profesori asociati cu acest curs
             if (Inscriere.CursID != 0)
             {
                 ProfesorList = await _context.ProfesorCursuri
@@ -54,8 +54,10 @@ namespace AplicatieStudenti.Pages.Inscrieri
 
             return Page();
         }
+        // Aceasta metoda este apelata atunci cand se face un request AJAX pentru a adauga profesori in functie de curs
         public async Task<IActionResult> OnGetProfesoriPentruCursAsync(int cursId)
         {
+            // Selecteaza toti profesorii asociati cu cursul selectat si returneaza datele in format JSON
             var profesori = await _context.ProfesorCursuri
                .Where(pc => pc.CursId == cursId)
                .Select(pc => new
@@ -67,7 +69,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
                .ToListAsync();
             return new JsonResult(profesori);
         }
-
+        // Metoda care se executa atunci cand formularul este trimis (POST request)
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -87,7 +89,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
                         Text = c.NumeCurs
                     })
                     .ToListAsync();
-
+                // Daca cursul este selectat, populeaza lista de profesori pentru acest curs
                 if (Inscriere.CursID != 0)
                 {
                     ProfesorList = await _context.ProfesorCursuri
@@ -102,7 +104,7 @@ namespace AplicatieStudenti.Pages.Inscrieri
 
                 return Page();
             }
-
+            // Verifica daca studentul este deja inscris la acest curs cu acelasi profesor
             bool alreadyEnrolled = await _context.Inscrieri
                 .AnyAsync(i => i.StudentID == Inscriere.StudentID &&
                                i.CursID == Inscriere.CursID &&

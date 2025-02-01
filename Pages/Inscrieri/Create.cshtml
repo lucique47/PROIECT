@@ -5,7 +5,8 @@
 }
 <h2>Adaugare inscriere</h2>
 
-@if (TempData["ErrorMessage"] != null)
+<!-- Daca exista un mesaj de eroare temporar (stocat in TempData), acesta va fi afisat -->
+@if (TempData["ErrorMessage"] != null) 
 {
     <div class="alert alert-danger">
         @TempData["ErrorMessage"]
@@ -15,19 +16,19 @@
 <form method="post">
     <div class="form-group">
         <label for="StudentID">Student</label>
-        <select id="StudentID" name="Inscriere.StudentID" class="form-control">
+        <select id="StudentID" name="Inscriere.StudentID" class="form-control"> <!-- Lista de selectie pentru studenti -->
             <option value="">-- Selecteaza student --</option>
             @foreach (var student in ViewData["StudentList"] as List<SelectListItem> ?? new List<SelectListItem>())
             {
-                <option value="@student.Value">@student.Text</option>
+                <option value="@student.Value">@student.Text</option> // Populeaza lista de studenti cu optiuni din ViewData
             }
         </select>
     </div>
 
     <div class="form-group">
         <label for="CursID">Curs</label>
-        <select id="CursID" name="Inscriere.CursID" class="form-control" onchange="loadProfessors()">
-            <option value="">-- Selecteaza curs --</option>
+        <select id="CursID" name="Inscriere.CursID" class="form-control" onchange="loadProfessors()"> // Lista de selectie pentru cursuri, cu un handler onchange
+            <option value="">-- Selecteaza curs --</option> // Populeaza lista de cursuri din Model
             @foreach (var curs in Model.CursList)
             {
                 <option value="@curs.Value">@curs.Text</option>
@@ -40,7 +41,7 @@
         <select id="ProfesorID" name="Inscriere.ProfesorID" class="form-control">
             <option value="">-- Selecteaza profesor --</option>
             @foreach (var profesor in Model.ProfesorList)
-            {
+            { // Populeaza lista de profesori din Model. Daca profesorul este deja selectat, il marcheaza ca selectat.
                 <option value="@profesor.Value" selected="@(profesor.Value == Model.Inscriere.ProfesorID.ToString() ? "selected" : "")">@profesor.Text</option>
             }
         </select>
@@ -51,18 +52,22 @@
 </form>
 
 @section Scripts {
+     // Sectiunea de scripturi pentru a incarca dinamic profesori in functie de cursul selectat
     <script>
+        // Functia care se ocupa de incarcarea dinamica a profesorilor
         function loadProfessors() {
             var cursId = document.getElementById("CursID").value;
             var profesorSelect = document.getElementById("ProfesorID");
 
-            profesorSelect.innerHTML = '<option value="">-- Selecteaza un profesor --</option>';
+            profesorSelect.innerHTML = '<option value="">-- Selecteaza un profesor --</option>'; // Reseteaza lista de profesori
 
             if (cursId) {
+                // Daca este selectat un curs, face un apel API pentru a obtine profesorii pentru cursul respectiv
                 fetch(`/Inscrieri/Create?handler=ProfesoriPentruCurs&cursId=${cursId}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data && data.length > 0) {
+                            // Daca sunt profesori disponibili, ii adauga in lista de profesori
                             data.forEach(profesor => {
                                 var option = document.createElement("option");
                                 option.value = profesor.id;
@@ -70,6 +75,7 @@
                                 profesorSelect.appendChild(option);
                             });
                         } else {
+                            // Daca nu sunt profesori disponibili, adauga un mesaj corespunzator
                             var option = document.createElement("option");
                             option.textContent = "Nu exista profesori pentru acest curs";
                             profesorSelect.appendChild(option);

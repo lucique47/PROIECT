@@ -10,14 +10,9 @@ using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Pages.Studenti
 {
-    public class IndexModel : PageModel
+    public class IndexModel(AplicatieStudenti.Data.AplicatieStudentiContext context) : PageModel
     {
-        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context;
-
-        public IndexModel(AplicatieStudenti.Data.AplicatieStudentiContext context)
-        {
-            _context = context;
-        }
+        private readonly AplicatieStudenti.Data.AplicatieStudentiContext _context = context;
 
         public IList<Student> Student { get;set; } = default!;
 

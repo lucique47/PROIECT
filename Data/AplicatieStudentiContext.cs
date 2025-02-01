@@ -3,16 +3,18 @@ using AplicatieStudenti.Models;
 
 namespace AplicatieStudenti.Data
 {
+    // Clasa care defineste conexiunea la baza de date si entitatile ce vor fi mapate in SQL
     public class AplicatieStudentiContext(DbContextOptions<AplicatieStudentiContext> options) : DbContext(options)
     {
 
-       
-        public DbSet<Inscriere> Inscrieri { get; set; }
+        // Definim entitatile care vor fi transformate in tabele in baza de date
+        public DbSet<Inscriere> Inscrieri { get; set; } // Relatie many-to-many
         public DbSet<Student> Studenti { get; set; }
         public DbSet<Curs> Cursuri { get; set; }
         public DbSet<Profesor> Profesori { get; set; }
-        public DbSet<ProfesorCurs> ProfesorCursuri { get; set; }
+        public DbSet<ProfesorCurs> ProfesorCursuri { get; set; } // Relatie many-to-many intre Profesori si Cursuri
 
+        // Configuram relatiile dintre entitati in baza de date
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
